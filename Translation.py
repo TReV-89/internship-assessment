@@ -1,45 +1,42 @@
-import requests
+import pip._vendor.requests
+from sitepackages.dotenv import load_dotenv,find_dotenv
 import json
+import os
 
-source_language = input("Please choose the source language:(English, Luganda, Runyankole, Ateso, Lugbara or Acholi)\n")
-if source_language == "English":
-    target_language = input ("Please choose the target language:(Luganda, Runyankole, Ateso, Lugbara or Acholi)\n")
-    text = input("Enter the text to translate")
-elif source_language == "Luganda":
-    target_language = "English"
-    text = input("Enter the text to translate")
-elif source_language == "Runyakole":
-    target_language = "English"
-    text = input("Enter the text to translate")
-elif source_language == "Ateso":
-    target_language = "English"
-    text = input("Enter the text to translate")
-elif source_language == "Lugbara":
-    target_language = "English"  
-    text = input("Enter the text to translate")
-elif source_language == "Acholi":
-    target_language = "English"
-    text = input("Enter the text to translate")
-else:
-    print("Do not recognise language")
+def main():
+    source_language = input("Please choose the source language:(English, Luganda, Runyankole, Ateso, Lugbara or Acholi)\n")
+    if source_language == "English":
+        target_language = input ("Please choose the target language:(Luganda, Runyankole, Ateso, Lugbara or Acholi)\n")
+        text = input("Enter the text to translate\n")
+    else:
+        target_language = "English"
+        text = input("Enter the text to translate\n") 
 
-url = 'https://sunbird-ai-api-5bq6okiwgq-ew.a.run.app'
+    url = 'https://sunbird-ai-api-5bq6okiwgq-ew.a.run.app'
+    load_dotenv(find_dotenv())
+    api_key = os.environ.get("APIKEY")
 
-headers = {
-    "Authorization": "Bearer {eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJbnRlcm5zaGlwcyIsImV4cCI6NDg0MTQ4NzEyMn0.-j3rdudJ9pXEm3-456LLiDPun5SwIm5sw-RoNvgDwfk}",
-    "Content-Type": "application/json"
-}
+    headers = {
+        "Authorization": api_key,
+        "Content-Type": "application/json"
+    }
 
-payload = {
-  "source_language": source_language,
-  "target_language": target_language,
-  "text": text
-}
+    payload = {
+        "source_language": source_language,
+        "target_language": target_language,
+        "text": text
+    }
 
-response = requests.post(f"{url}/tasks/translate", headers=headers, json=payload)
+    response = pip._vendor.requests.post(f"{url}/tasks/translate", headers=headers, json=payload)
 
-if response.status_code == 200:
-    translated_text = response.json()["text"]
-    print("Translate text:", translated_text)
-else:
-    print("Error:", response.status_code, response.text)
+    if response.status_code == 200:
+        translated_text = response.json()["text"]
+        print("Translate text:", translated_text)
+    else:
+        print("Error:", response.status_code, response.text)
+
+if __name__ == "__main__": 
+    respond = "yes"
+    while respond == "yes":
+        main()
+        response = input("Do you wish to continue translating\n")

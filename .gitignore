@@ -1,3 +1,5 @@
 .idea/
+.env
 venv
+sitepackages
 **__pycache__
